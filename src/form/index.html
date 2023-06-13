@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Converter</title>
+	<link rel="stylesheet" href="form/style.css">
+	<script type="text/javascript" src="form/script.js"></script>
+</head>
+<body>
+  <form id="upload-container" enctype="multipart/form-data" method="post" action="/">
+    <img id="upload-image" src="form/upload.svg">
+    <div>
+      <input id="file-input" type="file" name="file" multiple>
+      <label for="file-input">Choose the file</label>
+      <span>or drop it here to fetch text</span>
+      <br>
+      <br>
+      <br>
+      <input type="submit" class="button28" value="Convert">
+    </div>
+    <div id="file-counter">Files uploaded: 0</div>
+  </form>
+
+  <script>
+    var uploadContainer = document.getElementById('upload-container');
+    var fileInput = document.getElementById('file-input');
+    var convertButton = document.querySelector('.button28');
+    var fileCounter = document.getElementById('file-counter');
+
+    convertButton.setAttribute('disabled', 'disabled');
+
+    uploadContainer.addEventListener('dragover', handleDragOver);
+    uploadContainer.addEventListener('dragenter', handleDragEnter);
+    uploadContainer.addEventListener('dragleave', handleDragLeave);
+    uploadContainer.addEventListener('drop', handleDrop);
+
+    fileInput.addEventListener('change', handleFileInputChange);
+
+    function handleFileInputChange(e) {
+      var files = e.target.files;
+      if (files.length > 0) {
+        convertButton.removeAttribute('disabled');
+      } else {
+        convertButton.setAttribute('disabled', 'disabled');
+      }
+      fileCounter.textContent = 'Files uploaded: ' + files.length;
+    }
+
+    function handleDragOver(e) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
+
+    function handleDragEnter(e) {
+      e.preventDefault();
+      e.stopPropagation();
+      uploadContainer.classList.add('drag-over');
+    }
+
+    function handleDragLeave(e) {
+      e.preventDefault();
+      e.stopPropagation();
+      uploadContainer.classList.remove('drag-over');
+    }
+
+    function handleDrop(e) {
+      e.preventDefault();
+      e.stopPropagation();
+      uploadContainer.classList.remove('drag-over');
+
+      var files = e.dataTransfer.files;
+      if (files.length == 1) {
+        var file = files[0];
+        fileInput.files = files;
+
+        var form = new FormData(uploadContainer);
+        var xhr = new XMLHttpRequest();
+      }
+
+      fileCounter.textContent = 'Files uploaded: ' + files.length;
+    }
+  </script>
+</body>
+</html>
+
